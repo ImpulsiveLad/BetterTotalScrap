@@ -10,4 +10,4 @@ This makes it so that you should never be able to collect more than 100% of the 
 
 Yes I have OCD I know
 
-Also I suggest playing with ScanFix just so you can do the math and be satified <3
+Also I suggest playing with ScanFix just so you can do the math and be satisfied <3
