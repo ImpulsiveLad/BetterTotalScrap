@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using HarmonyLib;
 
 namespace BetterTotalScrap
@@ -8,11 +8,12 @@ namespace BetterTotalScrap
     {
         private const string modGUID = "impulse.BetterTotalScrap";
         private const string modName = "BetterTotalScrap";
-        private const string modVersion = "1.0.0";
+        private const string modVersion = "1.1.0";
         private readonly Harmony harmony = new Harmony(modGUID);
         void Awake()
         {
             harmony.PatchAll(typeof(HUDManagerPatch));
+            harmony.PatchAll(typeof(ShipleaveCalc));
         }
     }
 }
