@@ -1,23 +1,21 @@
-﻿using HarmonyLib;
-using System.Linq;
+using HarmonyLib;
 using UnityEngine;
 
 namespace BetterTotalScrap
 {
-    [HarmonyPatch(typeof(HUDManager), "FillEndGameStats")]
-    public class HUDManagerPatch
+    public static class GlobalVariables
+    {
+        public static int RemainingScrapInLevel;
+    }
+    [HarmonyPatch(typeof(StartOfRound), "ShipLeave")]
+    public class ShipleaveCalc
     {
         [HarmonyPostfix]
-        public static void FillEndGameStatsPostfix(HUDManager __instance, int scrapCollected)
+        public static void Postfix()
         {
-            int remainingScrapInLevel = CalculateRemainingScrapInLevel();
-            float finalCount = (int)(scrapCollected + remainingScrapInLevel);
-
-            finalCount += 80 * GameObject.FindObjectsOfType<LungProp>().Where(lung => lung.isLungDocked).Count();
-
-            __instance.statsUIElements.quotaDenominator.text = finalCount.ToString();
+            GlobalVariables.RemainingScrapInLevel = CalculateRemainingScrapInLevel();
         }
-        private static int CalculateRemainingScrapInLevel()
+        public static int CalculateRemainingScrapInLevel()
         {
             GrabbableObject[] array = Object.FindObjectsOfType<GrabbableObject>();
             int remainingValue = 0;
@@ -29,6 +27,17 @@ namespace BetterTotalScrap
                 }
             }
             return remainingValue;
+        }
+    }
+
+    [HarmonyPatch(typeof(HUDManager), "FillEndGameStats")]
+    public class HUDManagerPatch
+    {
+        [HarmonyPostfix]
+        public static void FillEndGameStatsPostfix(HUDManager __instance, int scrapCollected)
+        {
+            float finalCount = (int)(scrapCollected + GlobalVariables.RemainingScrapInLevel);
+            __instance.statsUIElements.quotaDenominator.text = finalCount.ToString();
         }
     }
 }
